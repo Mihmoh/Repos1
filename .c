@@ -1,13 +1,16 @@
+#include <iostream>
 #include<stdio.h>
-int main() {
+#include<locale.h>
+int main() {	
+	setlocale(LC_ALL, "Russian");
 	int a, b;
-	printf("BBEDITE a ");
+	printf("Введите a ");
 	scanf_s("%d", &a);
-	printf("BBEDITE b ");
-	scanf_s("%d", &b);
-	int d = 2, k = 0;
-	for (int i = 0; i < 100; i) {
-		if (a % d == 0 && b % d == 0) {
+	printf("Введите b ");
+	scanf_s("%d", &b);              //ввод данных
+	int d = 2, k = 0;               //d - делитель к - количество
+	for (int i = 0; i < 100; i) {            //бесконечный цикл
+		if (a % d == 0 && b % d == 0) {      //проверка на общий множитель
 			k++;
 			d++;
 			if (k == 2) {
@@ -15,16 +18,16 @@ int main() {
 			}
 		}
 		else {
-			if (d > a || d > b) {
+			if (d > a || d > b) {            //проверка величины делителя
 				break;
 			}
 			d++;
 		}
 	}
 	if (k == 2) {
-		printf("ECTb KAK MINIMYM 2 O6wIX MHO)|(ITELA");
+		printf("Есть как минимум два общих множителя");
 	}
 	else {
-		printf("HET 2 O6WIX MHO)|(ITELEN");
+		printf("Нет двух общих множителей");
 	}
 }
