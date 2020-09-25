@@ -1,0 +1,55 @@
+#include <iostream>
+#include <stdio.h>
+#include <locale.h>
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    int n;
+    int k = 0;
+    printf("Введите натуральное число ");
+    scanf_s("%d", &n);
+    printf("%d = ", n);
+    while (n >= 50) {
+        n = n - 50;
+        k = k + 1;
+        printf("50 + ");
+    }
+    while (n >= 20) {
+        n = n - 20;
+        k = k + 1;
+        printf("20 + ");
+    }
+    while (n >= 15) {
+        n = n - 15;
+        k = k + 1;
+        printf("15 + ");
+    }
+    while (n >= 10) {
+        n = n - 10;
+        k = k + 1;
+        printf("10 + ");
+    }
+    while (n >= 5) {
+        n = n - 5;
+        k = k + 1;
+        printf("5 + ");
+    }
+    while (n >= 3) {
+        n = n - 3;
+        k = k + 1;
+        printf("3 + ");
+    }
+    while (n >= 2) {
+        n = n - 2;
+        k = k + 1;
+        printf("2 + ");
+    }
+    while (n >= 1) {
+        n = n - 1;
+        k = k + 1;
+        printf("1 + ");
+    }
+    printf("0\n");
+    printf("Эту сумму можно выплатить за такое количество монет %d",k); 
+}
