@@ -1,0 +1,46 @@
+// Лабараторная 5 вариант 3. Дан двухмерный массив А размером n*m. Определить количество положительных, отрицательных и равных нулю элементов матрицы А.
+
+
+#include<stdio.h>
+#include <locale.h>
+#include<conio.h>
+#include <iostream>
+#define n 4
+#define m 3
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int i, j;
+	int pol = 0;
+	int otr = 0;
+	int nol = 0;
+	int mas[n][m];        		 	// двухмерный массив
+	printf("\nВведите элементы двумерного массива\n");
+	for (i = 0; i < n; i++)			// цикл по строкам массива
+		for (j = 0; j < m; j++)		// цикл по столбцам массива
+			scanf_s("%d", &mas[i][j]); 	// ввод элемента массива
+	printf("\nДвумерный массив\n");
+	for (i = 0; i < n; i++)
+	{
+		printf("\n");
+		for (j = 0; j < m; j++)
+		{
+			printf(" % 4d", mas[i][j]);
+			if (mas[i][j] > 0)
+			{
+				pol = pol + 1;
+			}
+			if (mas[i][j] < 0)
+			{
+				otr = otr + 1;
+			}
+			if (mas[i][j] == 0)
+			{
+				nol = nol + 1;
+			}
+		}
+	}
+	printf("\nКоличество положительных элементов: %d", pol);
+	printf("\nКоличество отрицательных элементов: %d", otr);
+	printf("\nКоличество нулевых элементов: %d", nol);
+}
