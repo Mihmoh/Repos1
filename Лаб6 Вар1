@@ -1,0 +1,67 @@
+// Лаб 6.1 Рассортировать отрицательные элементы каждого столбца матрицы по возрастанию. Положительные элементы оставить на своих местах.
+
+#include <iostream>
+#include <stdio.h>
+#include <locale.h>
+#include <stdlib.h>
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int** ptr;	
+	int n,m,a,b,c;		
+	printf("\n Введите количество строк и столбцов\n");
+	scanf_s("%d", &n);
+	scanf_s("%d", &m);	
+	ptr = (int**)calloc(n, sizeof(int*));
+	for (int i = 0; i < n; i++)
+		ptr[i] = (int*)calloc(m, sizeof(int));
+	printf("\n Введите элементы массива\n");
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			scanf_s("%d", *(ptr + i) + j);
+	
+	printf("\n Исходный массив\n");
+	for (int i = 0; i < n; i++)
+	{
+		printf("\n");
+		for (int j = 0; j < m; j++)
+		{
+			printf(" %d ", ptr[i][j]);
+		}
+	}
+
+	for (int j = 0; j < m; j++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			if (ptr[i][j] < 0)
+			{
+				a = i;
+				b = ptr[i][j];
+				for (c = i + 1; c < n; c++)
+				{
+					if (ptr[c][j] < b)
+					{
+						a = c;
+						b = ptr[c][j];
+					}
+					ptr[a][j] = ptr[i][j];
+					ptr[i][j] = b;
+				}
+			}
+		}
+	}
+
+	printf("\nОтсортированный массив \n");
+
+	for (int i = 0; i < n; i++)
+	{
+		printf("\n");
+		for (int j = 0; j < m; j++)
+		{
+			printf(" %d ", ptr[i][j]);
+		}
+	}
+}
+
