@@ -6,15 +6,15 @@
 struct student
 {
 	int number;
-	char* surname;	
+	char* surname;
 	union expulsion
 	{
 		char date[17];
+		int average;
 	};
-	int average;
 };
 
-void output(struct student* list, int records)			//функция ввода
+void output(struct student* list, int records, int n)			//функция ввода
 {
 	system("cls");
 	int i;
@@ -24,19 +24,29 @@ void output(struct student* list, int records)			//функция ввода
 
 	for (i = 0; i < records; i++)
 	{
-
-		printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);
 		
+		if (list[i].average > 0 && list[i].average < n)
+		{
+
+			printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+		}
+		else
+		{
+			printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+		}
+
 	}
 	printf("==========================================================\n");
 }
 
 struct student* input(struct student* list, int records, int n)			//функция ввода
 {
-	int i,j;
+	int i, j;
+	char s[17];
+	strcpy(s, "-\0");
 
 	system("cls");
-		
+
 	printf("Enter number of student's book: \n");
 	while (!scanf("%d", &i))
 	{
@@ -72,15 +82,27 @@ struct student* input(struct student* list, int records, int n)			//функци
 	fflush(stdin);
 	gets(list[records].date);
 
-	printf("Enter average score: \n");
-	scanf("%d", &list[records].average);
+	if (list[records].date[0] == s[0])
+	{
+		printf("Enter average score from 0 to 10: \n");	
+
+		while (list[records].average > 10 || list[records].average < 0)
+		{
+			while (!scanf("%d", &list[records].average))
+			{
+				rewind(stdin);
+				printf("Enter average score from 0 to 10: \n");
+			}
+			printf("Enter average score from 0 to 10: \n");
+		}
+	}
 
 	return list;
 }
 
 void search(struct student* list, int records, int n)			//функция поиска
 {
-	int j,i = 1,k,m,l;
+	int j, i = 1, k, m, l;
 	char s[30];
 	do
 	{
@@ -113,7 +135,15 @@ void search(struct student* list, int records, int n)			//функция пои�
 			{
 				if (j == list[i].number)
 				{
-					printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);					
+					if (list[i].average > 0 && list[i].average < n)
+					{
+
+						printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+					}
+					else
+					{
+						printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+					}
 					k++;
 				}
 			}
@@ -159,7 +189,15 @@ void search(struct student* list, int records, int n)			//функция пои�
 				}
 				if (k == l)
 				{
-					printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);
+					if (list[i].average > 0 && list[i].average < n)
+					{
+
+						printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+					}
+					else
+					{
+						printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+					}
 					m++;
 				}
 			}
@@ -206,7 +244,15 @@ void search(struct student* list, int records, int n)			//функция пои�
 				}
 				if (k == l)
 				{
-					printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);
+					if (list[i].average > 0 && list[i].average < n)
+					{
+
+						printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+					}
+					else
+					{
+						printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+					}
 					m++;
 				}
 			}
@@ -240,7 +286,15 @@ void search(struct student* list, int records, int n)			//функция пои�
 			{
 				if (j == list[i].average)
 				{
-					printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);
+					if (list[i].average > 0 && list[i].average < n)
+					{
+
+						printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+					}
+					else
+					{
+						printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+					}
 					k++;
 				}
 			}
@@ -265,18 +319,15 @@ void search(struct student* list, int records, int n)			//функция пои�
 	} while (i);
 }
 
-struct student* deleting(struct student* list, int records, int n)			//функция удаления
-{
-	
-}
+
 
 void maxscore(struct student* list, int records)
 {
 	system("cls");
-	int i, max=0;
+	int i, max = 0;
 	for (i = 0; i < records; i++)
 	{
-		if (list[i].average > max)
+		if (list[i].average > max && list[i].average < 11)
 		{
 			max = list[i].average;
 		}
@@ -290,7 +341,15 @@ void maxscore(struct student* list, int records)
 	{
 		if (list[i].average == max)
 		{
-			printf("||%6d||%16s||%20s||%6d||\n", list[i].number, list[i].surname, list[i].date, list[i].average);
+			if (list[i].average > 0 && list[i].average < 11)
+			{
+
+				printf("||%6d||%16s||                    ||%6d||\n", list[i].number, list[i].surname, list[i].average);
+			}
+			else
+			{
+				printf("||%6d||%16s||%20s||      ||\n", list[i].number, list[i].surname, list[i].date);
+			}
 		}
 	}
 	printf("==========================================================\n");
@@ -300,10 +359,9 @@ void maxscore(struct student* list, int records)
 
 int main()
 {
-	void output(struct student* list, int records);
+	void output(struct student* list, int records, int n);
 	struct student* input(struct student* list, int records, int n);
 	void search(struct student* list, int records, int n);
-	struct student* deleting(struct student* list, int records, int n);
 	void maxscore(struct student* list, int records);
 	struct student* list;
 	int i, j, records, k, l, n;
@@ -352,19 +410,16 @@ int main()
 	list[0].number = 1;		//инициализация некоторых элементов структуры
 	list[0].surname = (char*)malloc(30 * sizeof(char));
 	strcpy(list[0].surname, "Ivanov\0");
-	strcpy(list[0].date, "-\0");
 	list[0].average = 7;
 
 	list[1].number = 2;
 	list[1].surname = (char*)malloc(30 * sizeof(char));
 	strcpy(list[1].surname, "Smirnov\0");
-	strcpy(list[1].date, "-\0");
 	list[1].average = 6;
 
 	list[2].number = 3;
 	list[2].surname = (char*)malloc(30 * sizeof(char));
 	strcpy(list[2].surname, "Sobolev\0");
-	strcpy(list[2].date, "-\0");
 	list[2].average = 7;
 
 	for (i = 3; i < 10; i++)
@@ -373,11 +428,10 @@ int main()
 		list[i].surname = (char*)malloc(30 * sizeof(char));
 		strcpy(list[i].surname, "default\0");
 		strcpy(list[i].date, "01.01.2021\0");
-		list[i].average = 2;
 	}
 
 	do
-	{		
+	{
 
 		printf("\nList of possible operations:\n1 - show current structure;\n2 - add new elements;\n3 - search for specific elements;\n4 - delete element\n5 - show students with the biggest average score\n6 - delete exposed students\n0 - exit.\n\n");
 		while (!scanf("%d", &i))
@@ -390,7 +444,7 @@ int main()
 
 		if (i == 1)
 		{
-			output(list, records);
+			output(list, records, n);
 		}
 
 		if (i == 2)
@@ -633,9 +687,9 @@ int main()
 			for (i = 0; i < records; i++)
 			{
 				strcpy(s, "-\0");
-				if (list[i].date[0] != s[0])
+				if (list[i].average > 10 || list[i].average < 0)
 				{
-					records--;					
+					records--;
 					j = i;
 					for (j; j < records; j++)
 					{
@@ -652,7 +706,7 @@ int main()
 							list[j].date[k] = list[j + 1].date[k];
 							k++;
 						}
-						list[j].average = list[j + 1].average;	
+						list[j].average = list[j + 1].average;
 					}
 					i--;
 				}
