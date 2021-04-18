@@ -1,8 +1,88 @@
-#include <stdio.h>
-#include <malloc.h>
-#include <string.h>
-#include <io.h>
-#include <locale.h>
+//Текстовые файлы
+//1.	С клавиатуры заполнить файл целыми числами (так, чтобы каждое число занимало одинаковое количество байт).  Вывести все числа из файла на экран.
+//2.	Найти в файле минимальное число и вывести его на экран(если таких чисел несколько, вывести все).
+//3.	Все максимальные числа заменить на минимальные, а все минимальные – на максимальные.
+//Бинарные файлы
+//1.	С клавиатуры заполнить файл целыми числами.
+//2.	Посчитать, сколько в файле элементов с максимальным значением.
+//3.	Заменить все максимальные элементы значением минимального элемента.
+
+
+
+#include "Header.h"
+
+int main()
+{
+	int number = 0;
+	FILE* file = nullptr;
+	number = typeOfFile(number);
+	switch (number)
+	{
+	case 1:
+		number = menuText(file);
+		break;
+	case 2:
+		//menuBin(file);
+		break;
+	}
+	
+}
+
+//main
+
+#include "Header.h"
+
+int typeOfFile(int number)
+{
+	printf("1-text\n2-bin\n");
+	number = checkInput(number);
+	return number;
+}
+
+int checkInput(int number)
+{
+	while (!scanf_s("%d", &number))
+	{
+		rewind(stdin);
+		printf("Enter a number\n");
+	}
+	return number;
+}
+
+int menuText(FILE* file)
+{
+	char* nameFile = nullptr;
+	int number = 0, min = 0, max = 0;
+	if (nameFile == NULL)
+	{
+		nameFile = nameOfTheFileText(nameFile);
+	}
+	do
+	{
+		system("cls");
+		printf("1-create file\n2-output\n3-add to file\n4-find min\n5-swap\n6-exit\n");
+		number = checkInput(number);		
+		switch (number)
+		{
+		case 1:
+			creatorTextFile(file, nameFile);
+			break;
+		case 2:
+			outputText(file, nameFile);
+			break;
+		case 3:
+			addToFileText(file, nameFile);
+			break;
+		case 4:
+			min = findMin(file, nameFile);
+			printf("The minimal number is %d\n", min);
+			continualCondition();
+			break;
+		case 6:
+			return 0;
+		}
+	} while (1);
+}
 
 char* nameOfTheFileText(char* nameFile)
 {
@@ -11,6 +91,7 @@ char* nameOfTheFileText(char* nameFile)
 		int j = 0;
 		char temp;
 		nameFile = (char*)calloc(1, sizeof(char));
+		rewind(stdin);
 		printf("Enter the name of file: ");
 		while (1)
 		{
@@ -34,217 +115,108 @@ char* nameOfTheFileText(char* nameFile)
 	return nameFile;
 }
 
-void print(FILE *f)                     //функция ввода
+char* creatorTextFile(FILE* file, char* nameFile)
 {
-	int i;
-	if (!f) return;
-	rewind(f);
-	printf("\n|");
-	while(1)
-	{  fscanf(f, "%d", &i);
-	   printf(" %d", i);
-	   if(feof(f)) break;
+	int number = 0;
+	file = fopen(nameFile, "w+t");
+	while (1)          //ввод чисел
+	{
+		printf("Enter a number. 999 - stop entering\n");
+		number = checkInput(number);
+		if (number == 999) break;
+		fprintf(file, " %d", number);
+		system("cls");
 	}
-	printf("|");
+	rewind(file);
+	fclose(file);
+	return nameFile;
 }
 
-void print_bin(FILE* f)                     //функция ввода
+void outputText(FILE* file, char* nameFile)
 {
-	int i;
-	if (!f) return;
-	rewind(f);
+	file = fopen(nameFile, "r");
+	int number;
+	if (!file) return;
+	rewind(file);
 	printf("\n|");
 	while (1)
 	{
-		fread(&i, sizeof(int), 1, f);
-		if (feof(f))  break;
-		printf(" %d", i);
+		fscanf(file, "%d", &number);
+		printf(" %d", number);
+		if (feof(file)) break;
 	}
-	printf("|");
+	printf(" |\n");
+	fclose(file);
+	continualCondition();
 }
 
-int main()
+void continualCondition()
 {
-	FILE *f, *f1, *f2;
-	int i, j=0, j2=0, a, min=0, kmin=0, max=0, kmax=0, k=0;
-	char* nameFile = NULL;
-	if (nameFile == NULL)
-	{
-		nameFile = nameOfTheFileText(nameFile);
-	}
-	
-	do
-	{
-		printf("1 - work with text file; 2 - work with binary file\n");
-		while (!scanf("%d", &i))
-		{
-			rewind(stdin);
-			printf("\n1 - work with text file; 2 - work with binary file\n");
-		}
-
-		if (i == 1)			//работа с текстовыми файлами
-		{
-			f1 = fopen(nameFile, "w+t");
-			f2 = fopen("bbb.txt", "w+t");
-			while (1)          //ввод чисел
-			{
-				printf("Enter a number. 999 - stop entering\n");
-				while (!scanf("%d", &i))
-				{
-					rewind(stdin);
-					printf("Enter a number. 999 - stop entering\n");
-				}
-				if (i == 999) break;
-				rewind(f1);
-				fseek(f1, 0, 2);
-				fprintf(f1, " %d", i);
-				system("cls");
-			}
-			rewind(f1);
-			fscanf(f1, "%d", &min);
-			rewind(f1);
-			fscanf(f1, "%d", &max);
-			rewind(f1);
-
-			while (1)         //нахождение максимального и минимального числа
-			{
-				fscanf(f1, "%d", &i);
-				if (min >= i)
-				{
-					min = i;
-				}
-				if (max <= i)
-				{
-					max = i;
-				}
-				if (feof(f1)) break;
-			}
-			rewind(f1);
-
-			while (1)            //подсчёт минимальных и максимальных чисел
-			{
-				fscanf(f1, "%d", &i);
-				if (min == i)
-				{
-					kmin++;
-				}
-				if (max == i)
-				{
-					kmax++;
-				}
-				if (feof(f1)) break;
-			}
-
-			printf("\nThe minimal numbers are: ");         //вывод минимальных чисел
-			for (i = 0; i < kmin; i++)
-			{
-				printf(" %d", min);
-			}
-			printf("\nThe maximal number is %d. Its quantity is %d\n", max, kmax);
-			print(f1);
-			rewind(f1);
-
-
-			while (1)        //замена минимальных на максимальные и максимальных на минимальные в другом файле
-			{
-				if (j == kmin + kmax) break;
-				fscanf(f1, "%d", &i);
-				if (min == i)
-				{
-					fprintf(f2, " %d", max);
-					j++;
-					continue;
-				}
-				if (max == i)
-				{
-					fprintf(f2, " %d", min);
-					j++;
-					continue;
-				}
-				fprintf(f2, " %d", i);
-				if (feof(f1) || j == kmin + kmax) break;
-			}
-			rewind(f1);
-			rewind(f2);
-
-			while (1)            //перезапись чисел из другого файла в первый
-			{
-				fscanf(f2, " %d", &i);
-				fprintf(f1, " %d", i);
-				if (feof(f2) || feof(f1)) break;
-			}
-
-			print(f1);
-			fclose(f1);
-			fclose(f2);
-
-			return 0;
-		}
-
-		if (i == 2)			//работа с бинарными файлами
-		{
-			f = fopen(nameFile, "w+b");
-			rewind(f);
-			while (1)
-			{
-
-				printf("Enter a number. 999 - stop entering\n");
-				while (!scanf("%d", &i))
-				{
-					rewind(stdin);
-					printf("Enter a number. 999 - stop entering\n");
-				}
-				if (i == 999) break;
-				rewind(f);
-
-				fseek(f, 0, 2);
-				fwrite(&i, sizeof(int), 1, f);
-				system("cls");
-			}
-			rewind(f);
-
-			print_bin(f);
-			rewind(f);
-
-			fread(&min, sizeof(int), 1, f);
-			rewind(f);
-			do                       //нахождение минимального и максимального значений
-			{
-				fread(&j, sizeof(int), 1, f);
-				if (feof(f))  break;
-				if (max < j)
-				{
-					max = j;
-				}
-				if (min > j)
-				{
-					min = j;
-				}
-			} while (1);
-			rewind(f);
-
-			do               //замена максимального значения минимальным
-			{
-				fread(&j, sizeof(int), 1, f);
-				if (feof(f))  break;
-				if (max == j)
-				{
-					k++;
-					fseek(f, 0 - sizeof(int), 1);
-					fwrite(&min, sizeof(int), 1, f);
-					rewind(f);
-				}
-			} while (1);
-			printf("\n The biggest number is %d. The minimal number is %d. Number of the biggest numbers is %d\n", max, min, k);
-			rewind(f);
-
-			print_bin(f);
-			rewind(f);
-
-			fclose(f);
-			return 0;
-		}
-		
-	} while (i);
-	
+	char s;
+	rewind(stdin);
+	printf("Press enter to continue... ");
+	scanf_s("%c", &s);
 }
+
+void addToFileText(FILE* file, char* nameFile)
+{
+	int number = 0;
+	file = fopen(nameFile, "a");
+	while (1)          //ввод чисел
+	{
+		printf("Enter a number. 999 - stop entering\n");
+		number = checkInput(number);
+		if (number == 999) break;
+		fprintf(file, " %d", number);
+		system("cls");
+	}
+	rewind(file);
+	fclose(file);
+}
+
+int findMin(FILE* file, char* nameFile)
+{
+	file = fopen(nameFile, "r");
+	int min = 0, number = 0;
+	fscanf(file, "%d", &min);
+	rewind(file);
+	while (1)         //нахождение максимального и минимального числа
+	{
+		fscanf(file, "%d", &number);
+		if (min >= number)
+		{
+			min = number;
+		}		
+		if (feof(file)) break;
+	}
+	rewind(file);
+	fclose(file);
+	return min;
+}
+
+//functions
+
+#pragma once
+#pragma warning(disable: 4996)
+
+#include <Windows.h>
+#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
+#include <io.h>
+
+int typeOfFile(int);
+int checkInput(int);
+void continualCondition();
+
+char* creatorTextFile(FILE*, char*);
+int menuText(FILE*);
+char* nameOfTheFileText(char*);
+void addToFileText(FILE*, char*);
+void outputText(FILE*, char*);
+int findMin(FILE*, char*);
+int findMax(FILE*, char*);
+
+
+
+//header
