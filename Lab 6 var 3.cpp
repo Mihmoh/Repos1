@@ -33,7 +33,7 @@ public:
 	}
 	virtual ~worker()
 	{
-		cout << "Destructor of worker..." << endl;
+
 	}
 	virtual int Counting() = 0;
 	virtual void printInfo() = 0;
@@ -66,7 +66,7 @@ public:
 	}
 	~engineer() 
 	{
-		cout << "Destructor of engineer..." << endl;
+
 	}
 	void init() override
 	{
@@ -98,6 +98,7 @@ public:
 	friend void sortWorkDays(worker**& , const int& );
 	friend void sortWorkHours(worker**&, const int&);
 	friend void sortTotalWork(worker**&, const int&);
+	friend void search(worker**&, const int&, int);
 };
 
 class salary: public engineer
@@ -121,7 +122,7 @@ public:
 	}
 	~salary()
 	{
-		cout << "Destructor of salary..." << endl;
+
 	}
 	void init() override
 	{
@@ -147,6 +148,8 @@ public:
 		cout << "___________________________________" << endl;
 	}
 	friend void sortMPH(worker**&, const int&);
+	friend void sortTotalSalary(worker**&, const int&);
+	friend void search(worker**&, const int&, int);
 };
 
 class medic : public worker
@@ -167,7 +170,7 @@ public:
 	}
 	~medic()
 	{
-		cout << "Destructor of medic..." << endl;
+
 	}
 	void init() override
 	{
@@ -189,6 +192,7 @@ public:
 	}
 	friend void sortQOP(worker**& , const int& );
 	friend void sortTOW(worker**&, const int&);
+	friend void search(worker**&, const int&, int);
 };
 
 void printMenu()
@@ -202,6 +206,8 @@ void printMenu()
 	cout << "7 - sort by money per hour " << endl;
 	cout << "8 - sort by quantity of patients " << endl;
 	cout << "9 - sort by time of work " << endl;
+	cout << "10 - sort by total salary " << endl;
+	cout << "11 - search by diapason " << endl;
 	cout << "0 - exit " << endl;
 }
 
@@ -390,6 +396,40 @@ void sortMPH(worker**& mas, const int& size)
 
 }
 
+void sortTotalSalary(worker**& mas, const int& size)
+{
+	salary* A, * B;
+	cout << "1 - by uprising, 2 - by decreasing: " << endl;
+	int  option;
+	option = checkInt();
+	switch (option)
+	{
+	case 1:
+		for (int i = 0; i < size; ++i)
+			for (int j = i + 1; j < size; ++j)
+			{
+				A = (salary*)mas[i];
+				B = (salary*)mas[j];
+				if (A->totalSalary > B->totalSalary)
+					swap(mas[i], mas[j]);
+			}
+		break;
+	case 2:
+		for (int i = 0; i < size; ++i)
+			for (int j = i + 1; j < size; ++j)
+			{
+				A = (salary*)mas[i];
+				B = (salary*)mas[j];
+				if (A->totalSalary < B->totalSalary)
+					swap(mas[i], mas[j]);
+			}
+		break;
+	default:
+		break;
+	}
+
+}
+
 void sortQOP(worker**& mas, const int& size)
 {
 	medic* A, * B;
@@ -458,6 +498,170 @@ void sortTOW(worker**& mas, const int& size)
 
 }
 
+void search(worker**& mas, const int& size, int option)
+{
+	engineer a("0", 0, 0, 0);
+	salary b("0", 0, 0, 0, 0);
+	medic c("0", 0);
+	engineer* A;
+	salary* B;
+	medic* C;
+	int min, max, j=0;
+	switch (option)
+	{
+	case 1:
+		cout << "Enter min work days" << endl;
+		min = checkInt();
+		cout << "Enter max work days" << endl;		
+		max = checkInt();		
+		for (int i = 0; i < size; i++)
+		{
+			A = (engineer*)mas[i];
+			B = (salary*)mas[i];
+			if (A->workDays >= min && A->workDays <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(a).name() || typeid(*mas[i]).name() == typeid(b).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}				
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	case 2:
+		cout << "Enter min work hours" << endl;
+		min = checkInt();
+		cout << "Enter max work hours" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			A = (engineer*)mas[i];
+			B = (salary*)mas[i];
+			if (A->workHours >= min && A->workHours <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(a).name() || typeid(*mas[i]).name() == typeid(b).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	case 3:
+		cout << "Enter min total work" << endl;
+		min = checkInt();
+		cout << "Enter max total work" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			A = (engineer*)mas[i];
+			B = (salary*)mas[i];
+			if (A->totalWork >= min && A->totalWork <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(a).name() || typeid(*mas[i]).name() == typeid(b).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;	
+	case 4:
+		cout << "Enter min money per hour" << endl;
+		min = checkInt();
+		cout << "Enter max money per hour" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			B = (salary*)mas[i];
+			if (B->moneyPerHour >= min && B->moneyPerHour <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(b).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	case 5:
+		cout << "Enter min total salary" << endl;
+		min = checkInt();
+		cout << "Enter max total salary" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			B = (salary*)mas[i];
+			if (B->totalSalary >= min && B->totalSalary <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(b).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	case 6:
+		cout << "Enter min quantity of patients" << endl;
+		min = checkInt();
+		cout << "Enter max quantity of patients" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			C = (medic*)mas[i];
+			if (C->quantity_Of_Patients >= min && C->quantity_Of_Patients <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(c).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	case 7:
+		cout << "Enter min quantity of patients" << endl;
+		min = checkInt();
+		cout << "Enter max quantity of patients" << endl;
+		max = checkInt();
+		for (int i = 0; i < size; i++)
+		{
+			C = (medic*)mas[i];
+			if (C->time_Of_work >= min && C->time_Of_work <= max)
+			{
+				if (typeid(*mas[i]).name() == typeid(c).name())
+				{
+					mas[i]->printInfo();
+					j++;
+				}
+			}
+		}
+		if (j == 0)
+			cout << "There are no elements in this diapason" << endl;
+		j = 0;
+		break;
+	}
+}
+
 int main()
 {
 	engineer a("0", 0, 0, 0);
@@ -471,7 +675,7 @@ int main()
 	option = checkInt();
 	switch (option)
 	{
-	case 1:
+	default:
 		proletariy[0] = new engineer;
 		proletariy[1] = new salary;
 		proletariy[2] = new medic;
@@ -589,9 +793,25 @@ int main()
 					proletariy[i]->printInfo();
 			}
 			break;
+		case 10:
+			system("cls");
+			sortTotalSalary(proletariy, size);
+			for (int i = 0; i < size; i++)
+			{
+				if (typeid(*proletariy[i]).name() == typeid(b).name())
+					proletariy[i]->printInfo();
+			}
+			break;
+		case 11:
+			system("cls");
+			cout << "Enter what to search: \n1 - work days\n2 - work hours\n3 - total work\n4 - money per hour\n5 - total salary\n6 - quantity of patients\n7 - time of work" << endl;
+			option = checkInt();
+			search(proletariy, size, option);				
+			option = 100;
+			break;
 		case 0:
 			for (int i = 0; i < size; i++)
-				delete[] proletariy[i];
+				delete proletariy[i];
 			return 0;
 		}
 	}
