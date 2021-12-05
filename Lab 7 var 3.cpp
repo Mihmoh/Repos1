@@ -49,6 +49,20 @@ T* reverse(T *mas, int size)
 	return sam;
 }
 
+template<>
+char* reverse(char* mas, int size)
+{
+	char* sam;
+	sam = new char[size];
+	int j = 0;
+	for (int i = size - 1; i > -1; i--)
+	{
+		sam[j] = mas[i];
+		j++;
+	}
+	return sam;
+}
+
 template <class T1>
 
 void printMassive(T1* mas, int size)
@@ -56,6 +70,18 @@ void printMassive(T1* mas, int size)
 	for (int i = 0; i < size; i++)
 	{
 		cout << mas[i] << " ";
+	}
+	cout << endl;
+	cout << endl;
+}
+
+template<>
+
+void printMassive(char* mas, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		cout << mas[i];
 	}
 	cout << endl;
 	cout << endl;
@@ -118,8 +144,8 @@ int main()
 			case 3:
 				cout << "Enter the value: " << endl;
 				Char = new char[size + 1];
-				cin.getline(Char, size);
-				cin.getline(Char, size);
+				cin.getline(Char, size+1);
+				cin.getline(Char, size+1);
 				break;
 			default:
 				break;
