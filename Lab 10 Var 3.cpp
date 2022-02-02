@@ -35,7 +35,12 @@ public:
 		case 4:
 			cout << "Exception: there are no such elements in stack" << endl;
 			break;
-
+		case 5:
+			cout << "Exception: there is already such element" << endl;
+			break;
+		case 6:
+			cout << "Exception: not char type" << endl;
+			break;
 		}
 	}
 };
@@ -88,6 +93,7 @@ public:
 	void pop_back();
 	void printList();
 	void findData(T data);
+	void comparing(string data, int Length);
 	int getSize() { return size; }
 	T& operator[](const int index);
 
@@ -137,10 +143,19 @@ void List<T>::push_back(T data)
 	else
 	{
 		Element<T>* current = this->head;
+		if (current->data == data)
+		{
+			throw MyException(5);
+		}
+		else
 		while (current->pNext != nullptr)
 		{
-			current = current->pNext;
-
+			if (current->data != data)
+			{
+				current = current->pNext;
+			}
+			else
+				throw MyException(5);
 		}
 		current->pNext = new Element<T>(data);
 
@@ -259,6 +274,90 @@ void List<T>::findData(T data)
 }
 
 template<typename T>
+void List<T>::comparing(string data, int Length)
+{
+	Element<string>* current = this->head;
+	int flg = 0;
+	int length = 0;
+	int j = 0;
+
+	if (Length == 1)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			while (current->data[j] != '\0')
+			{
+				length++;
+				j++;
+			}
+			for (j = 0; j < length; j++)
+			{
+				if (current->data[j] == data[0])
+				{
+					cout << i << ": " << current->data << endl;
+					flg = 1;
+				}
+			}
+			current = current->pNext;
+			j = 0;
+			length = 0;
+		}
+	}
+
+	if (Length == 2)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			while (current->data[j] != '\0')
+			{
+				length++;
+				j++;
+			}
+			for (j = 0; j < length - 1; j++)
+			{
+				if (current->data[j] == data[0] && current->data[j + 1] == data[1])
+				{
+					cout << i << ": " << current->data << endl;
+					flg = 1;
+				}
+			}
+			current = current->pNext;
+			j = 0;
+			length = 0;
+		}
+	}
+
+	if (Length == 3)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			while (current->data[j] != '\0')
+			{
+				length++;
+				j++;
+			}
+			for (j = 0; j < length - 2; j++)
+			{
+				if (current->data[j] == data[0] && current->data[j + 1] == data[1] && current->data[j + 2] == data[2])
+				{
+					cout << i << ": " << current->data << endl;
+					flg = 1;
+				}
+			}
+			current = current->pNext;
+			j = 0;
+			length = 0;
+		}
+	}
+	
+	if (flg == 0)
+		cout << "There are no such elements " << endl;
+	else
+		cout << endl;
+	
+}
+
+template<typename T>
 T& List<T>::operator[](const int index)
 {
 	int counter = 0;
@@ -282,6 +381,7 @@ void printMenu()
 	cout << "3 - print list" << endl;
 	cout << "4 - search element" << endl;
 	cout << "5 - delete element" << endl;
+	cout << "6 - find char with several letters" << endl;
 	cout << "0 - exit" << endl;
 }
 
@@ -291,7 +391,7 @@ int main()
 	List<int> Int;
 	List<double> Double;
 	List<string> String;
-	int option, type=0, addInt, index;
+	int option, type=0, addInt, index, length = 0;
 	double addDouble;
 	string addString;
 	while (true)
@@ -401,6 +501,24 @@ int main()
 					break;
 				}
 				break;
+			case 6:
+				if (type != 3)
+					throw MyException(6);				
+				system("cls");					
+				do
+				{
+					int j = 0;
+					length = 0;
+					cout << "Enter three letters" << endl;
+					cin >> addString;
+					while (addString[j] != '\0')
+					{
+						length++;
+						j++;
+					}
+				} while (length > 3);				
+				String.comparing(addString, length);
+				break;
 			case 0:
 				return 0;
 			}
@@ -413,3 +531,5 @@ int main()
 		}
 	}
 }
+
+//поиск по трём буквам, несколько объектов в контейнере
