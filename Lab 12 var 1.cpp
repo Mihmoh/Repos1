@@ -96,39 +96,116 @@ int main()
                 cout << cont[i] << endl;
             }
 
-            cout << endl << "Enter a symbol: " << endl;
-            char c;
+            cout << endl << "Enter symbols: " << endl;
+            char c, c1, c2;
             string s;
-            int quantity_in_string = 0, quantity_in_text = 0, j = 0;
+            int quantity_in_string = 0, quantity_in_text = 0, j = 0, length = 0;
 
             getline(cin, s);
             cin.clear();
-            c = s[0];
-
-            resultFile.open("resultFile.txt");
-            if (!resultFile)
-                throw MyException(1);
-            resultFile << "Symbol " << c << endl;
-
-            for (int i = 0; i < cont.size(); i++)
+            while (s[j] != '\0'&& j < 3)
             {
-                s = cont[i];
-                while (s[j] != '\0')
-                {
-                    if (s[j] == c)
-                        quantity_in_string++;
-                    j++;
-                }
-                quantity_in_text = quantity_in_text + quantity_in_string;
-                cout << s << " - " << quantity_in_string << " symbols" << endl;
-                resultFile << s << " - " << quantity_in_string << " symbols" << endl;
+                j++;
+                length++;
+            }
+            if (length == 1)
+            {
+                c = s[0];
+
                 j = 0;
-                quantity_in_string = 0;
+                resultFile.open("resultFile.txt");
+                if (!resultFile)
+                    throw MyException(1);
+                resultFile << "Symbol " << c << endl;
+
+                for (int i = 0; i < cont.size(); i++)
+                {
+                    s = cont[i];
+                    while (s[j] != '\0')
+                    {
+                        if (s[j] == c)
+                            quantity_in_string++;
+                        j++;
+                    }
+                    quantity_in_text = quantity_in_text + quantity_in_string;
+                    cout << s << " - " << quantity_in_string << " symbols" << endl;
+                    resultFile << s << " - " << quantity_in_string << " symbols" << endl;
+                    j = 0;
+                    quantity_in_string = 0;
+                }
+
+                cout << endl << quantity_in_text << " symbols in all the text text" << endl;
+                resultFile << endl << quantity_in_text << " symbols in all the text text" << endl;
+                quantity_in_text = 0;
+                length = 0;
+            }
+            if (length == 2)
+            {
+                c = s[0];
+                c1 = s[1];
+
+                j = 0;
+                resultFile.open("resultFile.txt");
+                if (!resultFile)
+                    throw MyException(1);
+                resultFile << "Symbols " << c << c1 << endl;
+
+                for (int i = 0; i < cont.size(); i++)
+                {
+                    s = cont[i];
+                    while (s[j + 1] != '\0')
+                    {
+                        if (s[j] == c && s[j + 1] == c1)
+                            quantity_in_string++;
+                        j++;
+                    }
+                    quantity_in_text = quantity_in_text + quantity_in_string;
+                    cout << s << " - " << quantity_in_string << " symbols" << endl;
+                    resultFile << s << " - " << quantity_in_string << " symbols" << endl;
+                    j = 0;
+                    quantity_in_string = 0;
+                }
+
+                cout << endl << quantity_in_text << " combinations in all the text text" << endl;
+                resultFile << endl << quantity_in_text << " combinations in all the text text" << endl;
+                quantity_in_text = 0;
+                length = 0;
             }
 
-            cout<<endl << quantity_in_text << " symbols in all the text text" << endl;
-            resultFile << endl << quantity_in_text << " symbols in all the text text" << endl;
-            quantity_in_text = 0;
+            if (length == 3)
+            {
+                c = s[0];
+                c1 = s[1];
+                c2 = s[2];
+
+                j = 0;
+                resultFile.open("resultFile.txt");
+                if (!resultFile)
+                    throw MyException(1);
+                resultFile << "Symbols " << c << c1 << c2 << endl;
+
+                for (int i = 0; i < cont.size(); i++)
+                {
+                    s = cont[i];
+                    while (s[j + 2] != '\0')
+                    {
+                        if (s[j] == c && s[j + 1] == c1 && s[ j + 2 ] == c2)
+                            quantity_in_string++;
+                        j++;
+                    }
+                    quantity_in_text = quantity_in_text + quantity_in_string;
+                    cout << s << " - " << quantity_in_string << " symbols" << endl;
+                    resultFile << s << " - " << quantity_in_string << " symbols" << endl;
+                    j = 0;
+                    quantity_in_string = 0;
+                }
+
+                cout << endl << quantity_in_text << " combinations in all the text text" << endl;
+                resultFile << endl << quantity_in_text << " combinations in all the text text" << endl;
+                quantity_in_text = 0;
+                length = 0;
+            }
+            
 
             sourceFile.close();
             resultFile.close();
@@ -147,3 +224,4 @@ int main()
     }      
 }
 
+//от одного до трёх символов искать последовательность
